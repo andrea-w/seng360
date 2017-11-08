@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 
+import java.security.*;
+import javax.crypto.*;
+import java.security.*;
+
 import com.mkyong.rmiinterface.RMIInterface;
 
 public class ClientOperation {
@@ -18,11 +22,11 @@ public class ClientOperation {
 	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		
 		look_up = (RMIInterface) Naming.lookup("//localhost/MyServer");
+		featuresSelection();
 
-		featuresSelection();			
 	}
 
-	public static void featuresSelection() {
+	public static void featuresSelection() throws MalformedURLException, RemoteException, NotBoundException {
 		final JPanel panel = new JPanel();
 		final JRadioButton buttonC = new JRadioButton("Confidentiality");
 		final JRadioButton buttonI = new JRadioButton("Integrity");
@@ -34,19 +38,46 @@ public class ClientOperation {
 		panel.add(buttonI);
 		panel.add(buttonA);
 
+
+		//confidentiality();
+		
 		JOptionPane.showMessageDialog(null, panel);
 
 		String txt = "";
 		if (buttonC.isSelected()) {
-			txt += "Confidentiality ";
+			txt += "Confidentiality";
+			// confidentiality();
 		}
 		if (buttonI.isSelected()) {
-			txt += "Integrity ";	
+			txt += "Integrity";	
 		}
 		if (buttonA.isSelected()) {
-			txt += "Authentication ";	
+			txt += "Authentication";	
+		}
+		String test = look_up.getFeature();
+		JOptionPane.showMessageDialog(null, test);
+		
+		if (!test.equals(txt)) {
+			System.exit(0);
 		}
 
 		System.out.println("Client selected features: " + txt);
+	}
+
+	public static void confidentiality() throws MalformedURLException, RemoteException, NotBoundException {
+		String txt = JOptionPane.showInputDialog("Type your message");
+		
+		String response = look_up.helloTo(txt);
+
+		// KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+		// keyGen.init(128);
+		// SecretKey secretKey = keyGen.generateKey();
+
+		// JOptionPane.showMessageDialog(null, secretKey);
+		
+		
+
+
+		
 	}
 }

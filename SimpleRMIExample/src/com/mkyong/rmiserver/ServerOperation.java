@@ -3,16 +3,25 @@ package com.mkyong.rmiserver;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.security.*;
+import javax.crypto.*;
+import java.security.*;
 import com.mkyong.rmiinterface.RMIInterface;
 
 public class ServerOperation extends UnicastRemoteObject implements RMIInterface{
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;	
+	private static RMIInterface look_up;
+	
+	private static String feature;
 
 	protected ServerOperation() throws RemoteException {
 		super();
@@ -23,8 +32,11 @@ public class ServerOperation extends UnicastRemoteObject implements RMIInterface
 		System.err.println(name + " is trying to contact!");
 		return "Server says hello to " + name;
 	}
-	
-	public static void main(String[] args){
+	@Override
+	public String getFeature() {
+		return feature;
+	}
+	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		try {
 			Naming.rebind("//localhost/MyServer", new ServerOperation());            
             System.err.println("Server ready");
@@ -38,7 +50,7 @@ public class ServerOperation extends UnicastRemoteObject implements RMIInterface
         
 	}
 
-	public static void featuresSelection() {
+	public static void featuresSelection() throws MalformedURLException, RemoteException, NotBoundException {
 		final JPanel panel = new JPanel();
 		final JRadioButton buttonC = new JRadioButton("Confidentiality");
 		final JRadioButton buttonI = new JRadioButton("Integrity");
@@ -50,19 +62,30 @@ public class ServerOperation extends UnicastRemoteObject implements RMIInterface
 		panel.add(buttonI);
 		panel.add(buttonA);
 
-		JOptionPane.showMessageDialog(null, panel);
+		feature = "Confidentiality";
+		confidentiality();
+		// JOptionPane.showMessageDialog(null, panel);
 
 		String txt = "";
 		if (buttonC.isSelected()) {
-			txt += "Confidentiality ";
+			txt += "Confidentiality";
+			// confidentiality();
 		}
 		if (buttonI.isSelected()) {
-			txt += "Integrity ";	
+			txt += "Integrity";	
 		}
 		if (buttonA.isSelected()) {
-			txt += "Authentication ";	
+			txt += "Authentication";	
 		}
 
 		System.out.println("Server selected features: " + txt);	
+	}
+
+	public static void confidentiality() throws MalformedURLException, RemoteException, NotBoundException {
+		look_up = (RMIInterface) Naming.lookup("//localhost/MyServer");
+		
+		String txt = "test";
+		String response = look_up.helloTo(txt);
+		JOptionPane.showMessageDialog(null, response);
 	}
 }
