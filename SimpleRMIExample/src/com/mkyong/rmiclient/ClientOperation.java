@@ -19,6 +19,8 @@ import com.mkyong.rmiinterface.RMIInterface;
 public class ClientOperation {
 	private static RMIInterface look_up;
 
+	private static KeyPair pair;
+
 	public static void main(String[] args) throws MalformedURLException, RemoteException, NotBoundException {
 		
 		look_up = (RMIInterface) Naming.lookup("//localhost/MyServer");
@@ -54,14 +56,50 @@ public class ClientOperation {
 		if (buttonA.isSelected()) {
 			txt += "Authentication";	
 		}
-		String test = look_up.getFeature();
-		JOptionPane.showMessageDialog(null, test);
-		
-		if (!test.equals(txt)) {
-			System.exit(0);
-		}
 
 		System.out.println("Client selected features: " + txt);
+
+		
+		try {
+			String test = look_up.getFeature();	
+			if (!test.equals(txt)) {
+			JOptionPane.showMessageDialog(null, "Failed to connect. Conflicting security features.");
+			System.exit(0);
+		}
+		else {
+			while(true) {
+				if (txt.contains("Confidentiality")) {
+					confidentiality();	
+				}
+			}
+		}	
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		//JOptionPane.showMessageDialog(null, test);
+
+
+		
+		
+
+	}
+
+	public static void generateKeyPair() {
+
+		try {
+			// create key-pair generator object
+			KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+	
+			// initialize the generator
+			// specify keys of keysize 2048
+			keyGen.initialize(2048);
+	
+			// generate the key pair
+			pair = keyGen.generateKeyPair();
+		} catch (NoSuchAlgorithmException e) {
+			System.err.print(e);
+		}
+
 	}
 
 	public static void confidentiality() throws MalformedURLException, RemoteException, NotBoundException {
@@ -75,9 +113,7 @@ public class ClientOperation {
 
 		// JOptionPane.showMessageDialog(null, secretKey);
 		
-		
-
-
-		
 	}
+
+
 }
