@@ -1,3 +1,2 @@
-cd src
-rmiregistry &
+cd src 
 java com.mkyong.rmiserver.ServerOperation

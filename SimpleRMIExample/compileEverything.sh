@@ -1,1 +1,1 @@
-javac src/com/mkyong/rmiinterface/RMIInterface.java src/com/mkyong/rmiserver/ServerOperation.java src/com/mkyong/rmiclient/ClientOperation.java
+javac src/com/mkyong/rmiinterface/RmiInterface.java src/com/mkyong/rmiserver/ServerOperation.java src/com/mkyong/rmiclient/ClientOperation.java src/com/mkyong/aes/AES.java src/com/mkyong/rmiinterface/ClientCallBack.java
