@@ -1,0 +1,1 @@
+javac ./com/mkyong/aes/AES.java ./com/mkyong/integrity/Integrity.java ./com/mkyong/rmi/ClientCallBack.java ./com/mkyong/rmi/RmiInterface.java ./com/mkyong/rmiclient/ClientOperation.java ./com/mkyong/rmiserver/ServerOperation.java
