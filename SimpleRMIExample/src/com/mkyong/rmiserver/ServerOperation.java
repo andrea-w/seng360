@@ -62,9 +62,9 @@ public class ServerOperation extends UnicastRemoteObject implements RMIInterface
 		panel.add(buttonI);
 		panel.add(buttonA);
 
-		feature = "Confidentiality";
+		//feature = "Confidentiality";
 		confidentiality();
-		// JOptionPane.showMessageDialog(null, panel);
+		JOptionPane.showMessageDialog(null, panel);
 
 		String txt = "";
 		if (buttonC.isSelected()) {
@@ -78,14 +78,12 @@ public class ServerOperation extends UnicastRemoteObject implements RMIInterface
 			txt += "Authentication";	
 		}
 
+		feature = txt;
 		System.out.println("Server selected features: " + txt);	
 	}
 
 	public static void confidentiality() throws MalformedURLException, RemoteException, NotBoundException {
 		look_up = (RMIInterface) Naming.lookup("//localhost/MyServer");
 		
-		String txt = "test";
-		String response = look_up.helloTo(txt);
-		JOptionPane.showMessageDialog(null, response);
 	}
 }
